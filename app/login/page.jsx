@@ -1,9 +1,10 @@
+// app/login/page.js
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { login } from "@/lib/auth"
+import { login, isAuthenticated } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,6 +17,13 @@ export default function LoginPage() {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
+  // Redirect if already logged in
+  useEffect(() => {
+    if (isAuthenticated()) {
+      router.push('/dashboard')
+    }
+  }, [router])
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError("")
@@ -25,7 +33,6 @@ export default function LoginPage() {
 
     if (result.success) {
       router.push("/dashboard")
-      router.refresh()
     } else {
       setError(result.error)
       setIsLoading(false)

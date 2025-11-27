@@ -1,3 +1,4 @@
+// components/AuthGuard.jsx
 "use client"
 
 import { useEffect, useState } from "react"
@@ -9,12 +10,18 @@ export function AuthGuard({ children }) {
     const [isChecking, setIsChecking] = useState(true)
 
     useEffect(() => {
-        // Check authentication on client side
-        if (!isAuthenticated()) {
-            router.push("/login")
-        } else {
-            setIsChecking(false)
+        // Check authentication on mount
+        const checkAuth = () => {
+            if (!isAuthenticated()) {
+                router.push("/login")
+            } else {
+                setIsChecking(false)
+            }
         }
+
+        // Small delay to prevent flash
+        const timer = setTimeout(checkAuth, 100)
+        return () => clearTimeout(timer)
     }, [router])
 
     // Show loading while checking
