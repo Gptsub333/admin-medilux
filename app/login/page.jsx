@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { login } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -23,7 +24,7 @@ export default function LoginPage() {
     const result = await login(email, password)
 
     if (result.success) {
-      router.push("/")
+      router.push("/dashboard")
       router.refresh()
     } else {
       setError(result.error)
@@ -87,6 +88,13 @@ export default function LoginPage() {
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
+
+          <div className="mt-6 text-center text-sm">
+            <span className="text-muted-foreground">Don't have an account? </span>
+            <Link href="/register" className="font-medium text-primary hover:underline">
+              Register as admin
+            </Link>
+          </div>
 
           <div className="mt-6 rounded-md bg-muted p-4">
             <p className="text-center text-xs text-muted-foreground mb-2 font-medium">Demo Credentials</p>
